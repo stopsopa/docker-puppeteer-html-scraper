@@ -1,0 +1,6 @@
+/.idea/
+node_modules
+*.pdf
+/html.html
+/test_____/
+/config.js
