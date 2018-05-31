@@ -35,10 +35,6 @@
     <span style="float:right;">page: <span class="pageNumber"></span> / <span class="totalPages"></span></span>
 </div>`;
 
-        const {
-            Fragment
-        } = React;
-
         class Root extends React.Component {
             constructor(...args) {
 
@@ -116,6 +112,7 @@
                         <label>
                             <input type="text" name="url" style={{width:'98%'}} value={this.state.url} onChange={e => this.change('url', e.target.value )}/>
                         </label>
+                        {/*
                         <br/>
                         <label>
                             scale:
@@ -127,7 +124,8 @@
                             <input type="checkbox" checked={this.state.pdf.displayHeaderFooter || false} onChange={e => this.change('pdf.displayHeaderFooter', e.target.checked)}
                             />
                         </label>
-                        {this.state.pdf.displayHeaderFooter && (
+                        */}
+                        {this.state.pdf.displayHeaderFooter && false &&  (
     <table width="95%">
         <tbody>
         <tr>
@@ -163,6 +161,7 @@
                         )}
 
 
+                        {/*
                         <table width="95%">
                             <tbody>
                             <tr>
@@ -198,10 +197,11 @@
                             </tr>
                             </tbody>
                         </table>
+                        */}
 
                         <input type="hidden" name="json" value={JSON.stringify(this.state)}/>
                         <br />
-                        <input type="submit" value="generate pdf" />
+                        <input type="submit" value="scrap html" />
                     </form>
                 );
             }
@@ -212,8 +212,6 @@
             document.getElementById('root')
         );
     </script>
-
-    see source code...
 
     <script>
 
