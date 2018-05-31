@@ -35,6 +35,12 @@ Just visit:
     
 [Running puppeteer in Docker](https://github.com/GoogleChrome/puppeteer/blob/master/docs/troubleshooting.md#running-puppeteer-in-docker)       
     
+# Test server with redirections:
+
+    # run server
+    make test   
+    # then render http://<your_local_machine_ip>/one through http://localhost:7778/generate page 
+    
 # Ping:
     
     http://xx.xx.xx.xx:7778/pdf-generator-check 
