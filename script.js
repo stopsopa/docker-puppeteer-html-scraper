@@ -24,73 +24,121 @@ const path = require('path');
 
 const timeout = 15000;
 
-try {
+const waitUntil = [
+    // 'load',
+    // 'domcontentloaded',
+    'networkidle0',
+    'networkidle2',
+]
 
-(async() => {
+let page, browser;
 
-    const browser = await puppeteer.launch({
-        // headless: false,
-        args: [
-            '--no-sandbox',
-            '--disable-setuid-sandbox'
-        ],
+let pdfConfig = {
+    ...config.pdf,
+    ...{
+        path: '/app/app/' + process.env.P_TMPFILE
+    }
+};
 
-        // without this will continue to use the bundled version of Chromium that Puppeteer installs
-        // from: https://github.com/GoogleChrome/puppeteer/issues/379#issuecomment-328572755
-        // executablePath: '/usr/bin/chromium-browser', // chromium
-        executablePath: '/usr/bin/google-chrome-unstable', // google chrome
+if (/^(\d+\.)?\d+$/.test(pdfConfig.scale)) {
+    pdfConfig.scale = parseFloat(pdfConfig.scale);
+}
+else {
+    delete pdfConfig.scale;
+}
 
+const error = (error, code) => {
 
-        timeout
-    });
+    process.stdout.write(`catch: ` + JSON.stringify(error));
 
-        const page = await browser.newPage();
+    browser && browser.close();
 
-        // https://github.com/GoogleChrome/puppeteer/blob/master/examples/block-images.js
-        await page.setRequestInterception(true);
-        page.on('request', request => {
-            if (request.resourceType() === 'image')
-                request.abort();
-            else
-                request.continue();
-        });
+    process.exit(code || 100);
+}
 
-        page.setDefaultNavigationTimeout(timeout);
+puppeteer.launch({
+    // headless: false,
+    args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox'
+    ],
 
-        page.on('error', msg => {
+    // without this will continue to use the bundled version of Chromium that Puppeteer installs
+    // from: https://github.com/GoogleChrome/puppeteer/issues/379#issuecomment-328572755
+    // executablePath: '/usr/bin/chromium-browser', // chromium
+    executablePath: '/usr/bin/google-chrome-unstable', // google chrome
+
+    // executablePath: '/usr/bin/chromium-browser',
+
+    timeout
+})
+    .then(b => {
+        browser = b;
+        return b.newPage()
+    }, e => error(e, 1))
+    .then(p => {
+        page = p;
+        p.setDefaultNavigationTimeout(timeout);
+        p.on('error', msg => {
 
             process.stdout.write(`error: ` + JSON.stringify(msg));
 
-            browser.close();
+            // browser.close();
 
             process.exit(3);
         });
-        page.on('pageerror', msg => {
 
-            process.stdout.write(`pageerror: ` + JSON.stringify(msg));
+    }, e => error(e, 2))
+    .then(() => page.goto(process.env.P_URL), e => error(e, 3))
+    // .then(() => page.waitFor(3000), e => error(e.message, 4))
+    .then(() => page.content(), e => error(e, 5))
+    .then(html => {
+        fs.appendFileSync(pdfConfig.path, html + '')
+    }, e => error(e, 6))
+    // .then(d => {
+    //
+    // }, e => {
 
-            browser.close();
+    // })
+    .then(() => browser && browser.close(), () => browser && browser.close())
+;
 
-            process.exit(4);
-        });
 
-        process.on("unhandledRejection", (reason, p) => {
+        // https://github.com/GoogleChrome/puppeteer/blob/master/examples/block-images.js
+        // await page.setRequestInterception(true);
+        // page.on('request', request => {
+        //     if (request.resourceType() === 'image')
+        //         request.abort();
+        //     else
+        //         request.continue();
+        // });
 
-            process.stdout.write("unhandledRejection: Unhandled Rejection at: Promise" + JSON.stringify(p) + "reason:" + JSON.stringify(reason));
 
-            browser.close();
+        // page.on('pageerror', msg => {
+        //
+        //     process.stdout.write(`pageerror: ` + JSON.stringify(msg));
+        //
+        //     browser.close();
+        //
+        //     process.exit(4);
+        // });
 
-            process.exit(5);
-        });
+        // process.on("unhandledRejection", (e) => {
+        //
+        //     process.stdout.write("unhandledRejection: Unhandled Rejection at: Promise reason:" + JSON.stringify(e));
+        //
+        //     browser.close();
+        //
+        //     process.exit(5);
+        // });
 
-        const waitUntil = [
-            'load',
-            'domcontentloaded',
-            'networkidle0',
-            'networkidle2',
-        ]
-
-        await page.goto(process.env.P_URL, { waitUntil });
+        // process.stdout.write(`url: ` + JSON.stringify(process.env.P_URL));
+        //
+        // browser.close();
+        //
+        // process.exit(60);
+        //
+        // await page.goto(process.env.P_URL, { waitUntil });
         //
         // page.waitForNavigation({ waitUntil }),
         // page.waitForNavigation({ waitUntil }),
@@ -105,20 +153,6 @@ try {
         //     margin: { top: 0, right: 0, bottom: 0, left: 0 },
         //     scale: 0.7
         // });
-
-            let pdfConfig = {
-                ...config.pdf,
-                ...{
-                    path: '/app/app/' + process.env.P_TMPFILE
-                }
-            };
-
-            if (/^(\d+\.)?\d+$/.test(pdfConfig.scale)) {
-                pdfConfig.scale = parseFloat(pdfConfig.scale);
-            }
-            else {
-                delete pdfConfig.scale;
-            }
 
             // pdfConfig = {
             //     path: '/app/app/' + process.env.P_TMPFILE,
@@ -135,13 +169,13 @@ try {
 
             // fs.writeFileSync('/app/app/test.log', "\n\n"+ (new Date()).toISOString().substring(0, 19).replace('T', ' ')+"\n\n"+JSON.stringify(pdfConfig, null, 4)+"\n\n");
 
-            const html = await page.content();
+            // const html = await page.content();
 
         // process.stdout.write(`\n\n\n\nccccccrrrrrassssshhh\n\n\n\n`);
         //
         // process.exit(1);
 
-            fs.appendFileSync(pdfConfig.path, html + '');
+            // fs.appendFileSync(pdfConfig.path, html + '');
 
                                 // await page.pdf(pdfConfig);
 
@@ -149,16 +183,4 @@ try {
         //
         // process.exit(1);
 
-        browser.close();
-
-})();
-
-}
-catch (e) {
-
-    process.stdout.write(`puppeteer catch: ` + JSON.stringify(e.message));
-
-    browser.close();
-
-    process.exit(6);
-}
+        // browser.close();
