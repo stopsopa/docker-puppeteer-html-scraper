@@ -1,24 +1,13 @@
-# Versions:
-    
-In this repository there are two versions available. One with Google Chrome another with Chromium.
-For more information see [releases](https://github.com/stopsopa/docker-puppeteer-pdf-generator/releases)
-
-I had to have Google Chrome because footerTemplate and headerTemplate options of command page.pdf(options) didn't worked in chromium. see 
-[page.pdf(options) doc page](https://github.com/GoogleChrome/puppeteer/blob/master/docs/api.md#pagepdfoptions)
-
 
 # Installation:
 
-    mkdir node-pdf
-    cd node-pdf
-    git clone git@github.com:stopsopa/docker-puppeteer-pdf-generator.git .
+    git clone this repository and go to main directory
     yarn
-    docker build -t puppeteer-alpine-generate-pdf .
+    make build
     cp config.js.dist config.js
     
     # manually change password in config.js for basic auth
     
-    make build
     node server.js --port 7778
     
 
@@ -45,6 +34,12 @@ Just visit:
 # Puppeteer in Docker:
     
 [Running puppeteer in Docker](https://github.com/GoogleChrome/puppeteer/blob/master/docs/troubleshooting.md#running-puppeteer-in-docker)       
+    
+# Test server with redirections:
+
+    # run server
+    make test   
+    # then render http://<your_local_machine_ip>/one through http://localhost:7778/generate page 
     
 # Ping:
     

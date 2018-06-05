@@ -5,7 +5,6 @@ namespace CoreBundle\Services;
 use CoreBundle\Document\Page;
 use CoreBundle\Libs\App;
 use CoreBundle\Libs\Urlizer;
-use CoreBundle\Libs\UtilString;
 use Exception;
 use DateTime;
 

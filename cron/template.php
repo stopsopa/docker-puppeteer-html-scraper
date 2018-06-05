@@ -26,6 +26,7 @@ MAILTO=root
 # |  |  |  |  |
 # *  *  *  *  * user-name  command to be executed
   *  *  *  *  * root cd && . pdf-generator-service && date "+ --- vvv \%Y-\%m-\%d \%H:\%M:\%S vvv ---" >> ./cron/logs/everyminute_$(date +\%Y-\%m-\%d).log  && /bin/bash ./cron/everyminute.sh cron 2>&1 >> ./cron/logs/everyminute_$(date +\%Y-\%m-\%d).log
+  *  *  *  *  * root cd && . html-scraper          && date "+ --- vvv \%Y-\%m-\%d \%H:\%M:\%S vvv ---" >> ./cron/logs/everyminute_$(date +\%Y-\%m-\%d).log  && /bin/bash ./cron/everyminute.sh cron 2>&1 >> ./cron/logs/everyminute_$(date +\%Y-\%m-\%d).log
 
 
 

@@ -82,6 +82,18 @@ docker run \
 END
 );
 
+
+printf "\n\n\n    vvvvv\n\n"
+cat <<END
+    rm -rf html.html && docker run -it --cap-add=SYS_ADMIN -v \$(pwd)/script.js:/script.js -v \$(pwd):/app/app $DOCKERIMAGE bash
+
+    export P_URL="$URL"
+    export P_TMPFILE="$TMPFILE"
+    export P_JSON="$STDIN"
+    node script.js
+END
+printf "\n    ^^^^^\n\n"
+
 printf "\n"
 
 echo $SCRIPT;
