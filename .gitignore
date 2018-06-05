@@ -4,4 +4,4 @@ node_modules
 /html.html
 /test_____/
 /config.js
-/ssh-tunnel/config.sh
+/ssh-tunnel/.env

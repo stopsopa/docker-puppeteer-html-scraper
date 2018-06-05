@@ -4,7 +4,7 @@ DIR="$( cd "$( dirname "${THISFILE}" )" && pwd -P )"
 
 echo $DIR;
 
-source "$DIR/config.sh"
+source "$DIR/.env"
 
 # ssh root@$HOST -N -R 0.0.0.0:$TARGETHOSTPORT:localhost:$LOCALPORT -i ../ssh/id_rsa & disown
-ssh root@$HOST -N -R 0.0.0.0:$TARGETHOSTPORT:localhost:$LOCALPORT
+ssh root@$HOST -N -R $TARGETHOSTPORT:localhost:$LOCALPORT -v
