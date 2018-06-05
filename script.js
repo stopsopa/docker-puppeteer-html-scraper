@@ -28,6 +28,8 @@ const file = '/app/app/' + process.env.P_TMPFILE;
         args: [
             '--no-sandbox',
             '--disable-setuid-sandbox',
+            '--disable-gpu',
+            // '--allow-no-sandbox-job',
         ],
         // ignoreHTTPSErrors: true,
 
@@ -77,7 +79,7 @@ const file = '/app/app/' + process.env.P_TMPFILE;
     //         request.continue();
     // });
     //
-    // page.setDefaultNavigationTimeout(timeout);
+    page.setDefaultNavigationTimeout(timeout);
     //
     // page.on('error', msg => {
     //
