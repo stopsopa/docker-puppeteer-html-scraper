@@ -14,7 +14,7 @@ if [ "$#" == 0 ] ; then
 
 else
 
-    COUNT=$(ps aux | grep $FLAG | grep -v grep | grep -v "$THISFILE" | grep -v 'apache-deploy' | wc -l)
+    COUNT=$(ps aux | grep $FLAG | grep -v grep | grep -v "$THISFILE" | wc -l)
 
     if [ "$COUNT" != "1" ]; then
 

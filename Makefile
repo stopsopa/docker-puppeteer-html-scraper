@@ -1,11 +1,11 @@
 start: stop
-	node server.js --port 7778 html-scraper-puppeteer
+	node server.js --port 7778 html-scraper-pupp-server
 
 stop:
-	/bin/bash kill.sh html-scraper-puppeteer
+	/bin/bash kill.sh html-scraper-pupp-server
 
 status:
-	/bin/bash server-is-working.sh  html-scraper-puppeteer && echo 'working' || echo 'not working'
+	/bin/bash server-is-working.sh  html-scraper-pupp-server && echo 'working' || echo 'not working'
 
 build:
 	/bin/bash build.sh

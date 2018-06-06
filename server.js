@@ -251,7 +251,7 @@ const handler = (req, res, next) => {
     }
 
     // http://localhost:7778/pdf-generator-check
-    if (pathname === '/pdf-generator-check') {
+    if (pathname === '/html-scraper-ping') {
 
         res.end('ok');
 
