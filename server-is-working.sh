@@ -6,6 +6,15 @@
 FLAG=$1
 THISFILE="$(basename $0)"
 
+trim() {
+    local var="$*"
+    # remove leading whitespace characters
+    var="${var#"${var%%[![:space:]]*}"}"
+    # remove trailing whitespace characters
+    var="${var%"${var##*[![:space:]]}"}"
+    echo -n "$var"
+}
+
 if [ "$#" == 0 ] ; then
 
       echo "give flag parameter"
@@ -14,7 +23,11 @@ if [ "$#" == 0 ] ; then
 
 else
 
-    COUNT=$(ps aux | grep $FLAG | grep -v grep | grep -v "$THISFILE" | wc -l)
+    COUNT="$(ps aux | grep $FLAG | grep -v grep | grep -v "$THISFILE" | wc -l)"
+
+    COUNT="$(trim "$COUNT")"
+
+    echo ">>$COUNT<<"
 
     if [ "$COUNT" != "1" ]; then
 
