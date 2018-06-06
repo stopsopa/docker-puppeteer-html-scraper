@@ -35,7 +35,7 @@ else
 
         for i in "${IGNORE[@]}"
         do
-            LIST=$(echo -e "$LIST"  | grep -v "$i");
+            LIST=$(echo -e "$LIST" | grep -v "$i");
             # echo -e "after '$i': >>$LIST<<";
         done
     fi

@@ -3,7 +3,7 @@ const express   = require('express');
 
 const proxy     = require('http-proxy-middleware');
 
-const result = dotenv.config();
+const result = require('dotenv').config();
 
 if (result.error) {
 
@@ -16,7 +16,13 @@ const host = '0.0.0.0';
 
 const port = process.env.TARGETHOSTPORT;
 
-app.listen(port, host, () => {
+const nodeport = process.env.NODEPORT;
 
-    console.log(`\n 🌎  Server is running ${host}:${port}\n`)
+const app = express();
+
+app.use('/', proxy({target: `http://localhost:${port}`}));
+
+app.listen(nodeport, host, () => {
+
+    console.log(`\n 🌎  Server is running ${host}:${nodeport}\n`)
 });
