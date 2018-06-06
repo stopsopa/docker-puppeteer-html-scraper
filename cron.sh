@@ -1,6 +1,8 @@
 set -o xtrace
 
-make isworking
+id
+
+make isworking 2>&1
 
 STATUS="$?";
 
@@ -10,10 +12,10 @@ if [ "$STATUS" != "0" ]; then
 
     echo 'attempt to start';
 
-    make start
+    make start 2>&1
 fi
 
-make isworking
+make isworking 2>&1
 
 STATUS="$?";
 
