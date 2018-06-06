@@ -1,7 +1,7 @@
 #!/bin/bash
 
-#set -o xtrace
-#set -e
+# set -o xtrace
+# set -e
 
 FLAG=$1
 THISFILE="$(basename $0)"
