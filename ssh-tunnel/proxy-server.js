@@ -14,13 +14,13 @@ console.log(JSON.stringify(result.parsed, null, 4));
 
 const host = '0.0.0.0';
 
-const port = process.env.TARGETHOSTPORT;
+const targethostport = process.env.TARGETHOSTPORT;
 
 const nodeport = process.env.NODEPORT;
 
 const app = express();
 
-app.use('/', proxy({target: `http://localhost:${port}`}));
+app.use('/', proxy({target: `http://localhost:${targethostport}`}));
 
 app.listen(nodeport, host, () => {
 

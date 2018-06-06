@@ -12,6 +12,9 @@ stopnoensure:
 stop:
 	/bin/bash kill.sh ${FLAG}
 
+isworking:
+	/bin/bash is-working.sh
+
 
 
 

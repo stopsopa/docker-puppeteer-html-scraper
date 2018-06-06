@@ -4,6 +4,10 @@ Read more about ssh tunnels:
 
 usefull command to determine if it's working on target machine:
     netstat -ntpl
+    
+# ALLOW BINDING TO 0.0.0.0 ON THE SERVER
+
+  [https://superuser.com/a/588665](https://superuser.com/a/588665)    
 
 # Usage
 
@@ -18,3 +22,7 @@ on target server (with static ip) run:
 now open in browser <ip of server>:<NODEPORT>
 it will redirect traffic to localhost:<TARGETHOSTPORT>
 now through tunnel it will be redirected to Mac scraper service on port <LOCALPORT>
+
+# cron
+
+    * *   * * * root cd /var/www/html-scraper/ssh-tunnel && (make isworking || make start)
