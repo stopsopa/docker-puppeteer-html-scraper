@@ -4,8 +4,11 @@ start: stop
 stop:
 	/bin/bash kill.sh html-scraper-pupp-server
 
+isworking:
+	/bin/bash server-is-working.sh html-scraper-pupp-server
+
 status:
-	/bin/bash server-is-working.sh  html-scraper-pupp-server && echo 'working' || echo 'not working'
+	make isworking && echo 'working' || echo 'not working'
 
 build:
 	/bin/bash build.sh
