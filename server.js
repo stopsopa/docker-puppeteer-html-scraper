@@ -250,14 +250,6 @@ const handler = (req, res, next) => {
         return next();
     }
 
-    // http://localhost:7778/pdf-generator-check
-    if (pathname === '/html-scraper-ping') {
-
-        res.end('ok');
-
-        return next();
-    }
-
     if (pathname === '/favicon.ico') {
 
         res.end('no favicon');
@@ -565,5 +557,18 @@ const queue = function (handler) {
 
 const q = queue(handler);
 
-server.on('request', (req, res) => q(req, res));
+server.on('request', (req, res) => {
+
+    const pathname = (function () {
+        return req.url.split('?')[0];
+    }());
+
+    // http://localhost:7778/pdf-generator-check
+    if (pathname === '/html-scraper-ping') {
+
+        return res.end('ok');
+    }
+
+    q(req, res);
+});
 

@@ -1,5 +1,5 @@
 start: stop
-	node server.js --port 7778 html-scraper-pupp-server
+	node server.js --port 7778 html-scraper-pupp-server & disown
 
 stop:
 	/bin/bash kill.sh html-scraper-pupp-server
