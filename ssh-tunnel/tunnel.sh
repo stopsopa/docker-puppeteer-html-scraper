@@ -9,4 +9,4 @@ source "$DIR/.env"
 # ssh root@$HOST -N -R 0.0.0.0:$TARGETHOSTPORT:localhost:$LOCALPORT -i ../ssh/id_rsa & disown
 # ssh root@$HOST -N -R 0.0.0.0:$TARGETHOSTPORT:localhost:$LOCALPORT -v
 # autossh -M 0 -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" root@$HOST -N -R $TARGETHOSTPORT:localhost:$LOCALPORT -v -C
-autossh -M 0 -f -q -N -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" root@$HOST -R 0.0.0.0:$TARGETHOSTPORT:localhost:$LOCALPORT -v -C
+autossh -M 0 -f -o "ServerAliveInterval 30" -o "ServerAliveCountMax 3" -N -R 0.0.0.0:$TARGETHOSTPORT:localhost:$LOCALPORT root@$HOST -vv -C
