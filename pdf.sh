@@ -109,7 +109,7 @@ if [ "$STATUS" != "0" ]; then
 
     echo -e "for url: '$URL' receive process code != 0\nprocess code:$STATUS\nstdout:>>>>$OUTPUT<<<\n\n"
 
-    exit 1
+    exit $STATUS
 fi
 
 if [ ! -f $TMPFILE ]; then

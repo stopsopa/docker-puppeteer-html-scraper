@@ -217,6 +217,8 @@ var type = (function (types) {
     ico     : 'image/x-icon',
 }))));
 
+let generalError = false;
+
 const handler = (req, res, next) => {
 
     const pathname = (function () {
@@ -442,7 +444,86 @@ const handler = (req, res, next) => {
 
             try {
 
-                sel = shelljs.exec(cmd);
+                sel = shelljs.exec(cmd, function(code, stdout, stderr) {
+                    // if (sel.code != 0) {
+                    //
+                    //     tlog(`executing command '${cmd}' failed, exit code: '${sel.code}'`)
+                    //
+                    //     const ret = jsonResponse({
+                    //         error: `processing url '${purl}' failed`,
+                    //         stderr: sel.stderr
+                    //     });
+                    //
+                    //     purl = false;
+                    //
+                    //     return ret;
+                    // }
+
+                    const file = path.join(__dirname, 'html.html');
+
+                    if (code != 0) {
+
+                        tlog(`executing command '${cmd}' failed, exit code: '${sel.code}'`);
+
+                        const data = {
+                            error: `processing url '${purl}' failed`,
+                            stdout: stdout.split(/\n/),
+                            stderr: stderr.split(/\n/),
+                        };
+
+                        if (JSON.stringify(data).toLocaleLowerCase().indexOf('>>>>docker') > -1) {
+
+                            generalError = {
+                                time: (new Date()).toISOString().substring(0, 19).replace('T', ' '),
+                                json: data
+                            }
+                        }
+
+                        const ret = jsonResponse(data);
+
+                        purl = false;
+
+                        return ret;
+                    }
+
+                    if (fs.existsSync(file)) {
+
+                        tlog('attempt to return file: ' + file + ' from server');
+
+                        const stat = fs.statSync(file);
+
+                        res.setHeader('Content-Length', stat.size);
+                        // const stream = fs.createReadStream(file);
+
+                        // res.setHeader('Content-Type', 'application/pdf');
+                        res.setHeader('Content-Type', 'text/plain; charset=utf-8');
+
+                        // force browser to download
+                        // res.setHeader('Content-Disposition', 'attachment; filename=quote.pdf');
+
+                        // stream.pipe(res);
+
+                        const binary = fs.readFileSync(file, "binary")
+
+                        res.write(binary, "binary");
+
+                        res.end();
+
+                        purl = false;
+
+                        generalError = false;
+
+                        return setTimeout(next, 0);
+                    }
+                    else {
+
+                        jsonResponse({
+                            file: path.join(__dirname, 'html.html'),
+                            error: 'file was not created'
+                        })
+                    }
+
+                });
             }
             catch (e) {
 
@@ -454,56 +535,6 @@ const handler = (req, res, next) => {
                     error: 'innerCatch',
                     exception: e.toString()
                 });
-            }
-
-            const file = path.join(__dirname, 'html.html');
-
-            if (sel.code != 0) {
-
-                tlog(`executing command '${cmd}' failed, exit code: '${sel.code}'`)
-
-                const ret = jsonResponse({
-                    error: `processing url '${purl}' failed`
-                });
-
-                purl = false;
-
-                return ret;
-            }
-
-            if (fs.existsSync(file)) {
-
-                tlog('attempt to return file: ' + file + ' from server');
-
-                const stat = fs.statSync(file);
-                
-                res.setHeader('Content-Length', stat.size);
-                // const stream = fs.createReadStream(file);
-
-                                // res.setHeader('Content-Type', 'application/pdf');
-                res.setHeader('Content-Type', 'text/plain; charset=utf-8');
-
-                // force browser to download
-                // res.setHeader('Content-Disposition', 'attachment; filename=quote.pdf');
-
-                // stream.pipe(res);
-
-                const binary = fs.readFileSync(file, "binary")
-
-                res.write(binary, "binary");
-
-                res.end();
-
-                purl = false;
-
-                return setTimeout(next, 0);
-            }
-            else {
-
-                jsonResponse({
-                    file: path.join(__dirname, 'html.html'),
-                    error: 'file was not created'
-                })
             }
         }
         catch (e) {
@@ -565,6 +596,15 @@ server.on('request', (req, res) => {
 
     // http://localhost:7778/pdf-generator-check
     if (pathname === '/html-scraper-ping') {
+
+        if (generalError) {
+
+            res.statusCode = 500;
+
+            res.setHeader('Content-type', 'application/json; charset=utf-8');
+
+            return res.end(JSON.stringify(generalError, null, 4));
+        }
 
         return res.end('ok');
     }
