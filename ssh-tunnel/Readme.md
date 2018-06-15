@@ -9,6 +9,10 @@ usefull command to determine if it's working on target machine:
 
   [https://superuser.com/a/588665](https://superuser.com/a/588665)    
 
+# Installation autossh - mac
+    
+    brew install autossh
+
 # Usage
 
 on mac run:
