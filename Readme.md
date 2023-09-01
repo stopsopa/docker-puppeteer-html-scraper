@@ -2,7 +2,8 @@
 created in 2018, but I'll leave it here
 
 use better https://github.com/stopsopa/html-scraper-browserless Microservice tool to scraping html from "any" page
-(above suggestion is also deprecated, it's no longer suggestion)
+
+(above suggestion is also deprecated. I wouldn't suggest it anymore)
 
 
 # Installation:
